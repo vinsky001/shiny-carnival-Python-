@@ -54,7 +54,8 @@ def create_task():
     }    
     tasks.append(task) 
     return jsonify({'tasks': task }), 201   
-    
+
+app.route('/') 
 
 if __name__ == '__main__':
     app.run(debug=True)
