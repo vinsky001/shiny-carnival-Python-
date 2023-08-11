@@ -86,6 +86,7 @@ def delete_task(task_id):
     return jsonify({'result': True})
 
 # Api~Authentication
+#function is a callback function that the extension will use to obtain the password for a given user 
 @auth.get_password
 def get_password(username):
     if username == "Kibet":
@@ -93,6 +94,7 @@ def get_password(username):
     return None
 
 #Authentication-error_handling
+#callback will be used by the extension when it needs to send the unauthorized error code back to the client.
 @auth.error_handler
 def error_handler():
     return make_response({'error': 'Unauthorised access'}, 404)
