@@ -98,10 +98,14 @@ def get_password(username):
 @auth.error_handler
 def error_handler():
     return make_response({'error': 'Unauthorised access'}, 404)
+
+#Authentication setup
+#Functions that are going to be protected by the authntication by adding the @auth.login_required decorator
+@app.route('/todo/api/v1.0/task', methods=['GET'])
+@auth.login_required
+def get_tasks():
+    return jsonify({'task': tasks})
     
-
-
-       
-                                            
+    
 if __name__ == '__main__':
     app.run(debug=True)
