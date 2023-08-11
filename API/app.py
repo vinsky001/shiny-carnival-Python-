@@ -1,6 +1,8 @@
 # Lets create a flask web application
 from flask import Flask , jsonify, abort, make_response, request
+from flask_httpauth import HTTPBasicAuth
 
+auth = HTTPBasicAuth()
 app = Flask(__name__)
 
 @app.route('/')
@@ -81,7 +83,23 @@ def delete_task(task_id):
     if len(task) == 0:
         abort(404)
     task.remove(task[0])
-    return jsonify({'result': True})       
+    return jsonify({'result': True})
+
+# Api~Authentication
+@auth.get_password
+def get_password(username):
+    if username == "Kibet":
+        return "99iCloud"
+    return None
+
+#Authentication-error_handling
+@auth.error_handler
+def error_handler():
+    return make_response({'error': 'Unauthorised access'}, 404)
+    
+
+
+       
                                             
 if __name__ == '__main__':
     app.run(debug=True)
