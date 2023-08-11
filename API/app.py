@@ -2,8 +2,30 @@
 from flask import Flask , jsonify, abort, make_response, request
 from flask_httpauth import HTTPBasicAuth
 
-auth = HTTPBasicAuth()
+
 app = Flask(__name__)
+auth = HTTPBasicAuth()
+
+#Authentication setup
+#Functions that are going to be protected by the authntication by adding the @auth.login_required decorator
+@app.route('/todo/api/v1.0/task', methods=['GET'])
+@auth.login_required
+def get_tasks():
+    return jsonify({'task': tasks})
+    
+# Api~Authentication
+#function is a callback function that the extension will use to obtain the password for a given user 
+@auth.get_password
+def get_password(username):
+    if username == "Kibet":
+        return "99iCloud"
+    return None
+
+#Authentication-error_handling
+#callback will be used by the extension when it needs to send the unauthorized error code back to the client.
+@auth.error_handler
+def error_handler():
+    return make_response({'error': 'Unauthorised access'}, 404)
 
 @app.route('/')
 def home():
@@ -85,27 +107,6 @@ def delete_task(task_id):
     task.remove(task[0])
     return jsonify({'result': True})
 
-# Api~Authentication
-#function is a callback function that the extension will use to obtain the password for a given user 
-@auth.get_password
-def get_password(username):
-    if username == "Kibet":
-        return "99iCloud"
-    return None
-
-#Authentication-error_handling
-#callback will be used by the extension when it needs to send the unauthorized error code back to the client.
-@auth.error_handler
-def error_handler():
-    return make_response({'error': 'Unauthorised access'}, 404)
-
-#Authentication setup
-#Functions that are going to be protected by the authntication by adding the @auth.login_required decorator
-@app.route('/todo/api/v1.0/task', methods=['GET'])
-@auth.login_required
-def get_tasks():
-    return jsonify({'task': tasks})
-    
     
 if __name__ == '__main__':
     app.run(debug=True)
