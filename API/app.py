@@ -1,5 +1,5 @@
 # Lets create a flask web application
-from flask import Flask , jsonify, abort, make_response, request
+from flask import Flask , jsonify, abort, make_response, request, url_for
 from flask_httpauth import HTTPBasicAuth
 
 
@@ -26,6 +26,16 @@ def get_password(username):
 @auth.error_handler
 def error_handler():
     return make_response({'error': 'Unauthorised access'}, 404)
+
+def make_public_url(task):
+    new_task = {}
+    for field in task:
+        if field == 'id':
+            new_task['uri'] = url_for('get_task', task_id=task['id'], _external=True)
+        else:
+            new_task[field] = task[field]
+    return new_task           
+        
 
 @app.route('/')
 def home():
