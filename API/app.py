@@ -27,6 +27,7 @@ def get_password(username):
 def error_handler():
     return make_response({'error': 'Unauthorised access'}, 404)
 
+#This function returns the ful URL that function that controls the task
 def make_public_url(task):
     new_task = {}
     for field in task:
